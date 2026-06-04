@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ageing &amp; Health Expenditure — Global Panel Analysis 2000–2022</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+
+<link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+<!-- ═══ HERO ═════════════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">WQD7001 · Panel Data Analysis · 197 Countries · 2000–2022</div>
+  <h1>Does <em>Ageing</em> Drive<br>Health Spending?</h1>
+  <p class="hero-sub">
+    A global panel study of 197 sovereign states reveals that population ageing
+    is a statistically robust and economically significant driver of public health expenditure.
+  </p>
+  <div class="hero-stat-row">
+    <div class="hero-stat">
+      <span class="hero-stat-num">+0.237</span>
+      <span class="hero-stat-label">pp rise in health exp.<br>per 1 pp ageing ↑</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num orange">p &lt; 0.001</span>
+      <span class="hero-stat-label">Statistical significance<br>Country FE model</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num green">5 / 5</span>
+      <span class="hero-stat-label">Models consistent<br>in direction</span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</div>
+
+<!-- ═══ NAV ══════════════════════════════════════════════════════ -->
+<nav>
+  <span class="nav-logo">Ageing &amp; Health Exp.</span>
+  <a href="#sec-map">Global Map</a>
+  <a href="#sec-scatter">Scatter</a>
+  <a href="#sec-ranking">Ranking</a>
+  <a href="#sec-trend">Trends</a>
+  <a href="#sec-sim">Simulator</a>
+</nav>
+
+<!-- ═══ SECTION 1: BUBBLE MAP ════════════════════════════════════ -->
+<section class="section" id="sec-map">
+  <div class="section-label">01 — Global Distribution</div>
+  <h2 class="section-title fade-in">A World <em>Growing Older</em>,<br>Spending More</h2>
+  <p class="section-desc fade-in">
+    Bubble <strong>colour</strong> intensity = ageing rate (deeper orange = older population);
+    bubble <strong>size</strong> = health expenditure as % of GDP.
+    Drag the year slider to trace the global trajectory from 2000 to 2022.
+  </p>
+
+  <div class="ctrl-row">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Year: <span id="map-year-label" class="range-val">2010</span></span>
+      <input type="range" id="map-year" min="2000" max="2022" value="2010" oninput="updateMap()">
+    </div>
+    <div class="ctrl-group" style="margin-left:auto;margin-top:auto;">
+      <button class="toggle-btn" id="map-play-btn" onclick="toggleMapPlay()"
+        style="border:1px solid var(--border);border-radius:6px;padding:7px 20px;">▶ Play</button>
+    </div>
+  </div>
+
+  <div id="map-container">
+    <svg id="map-svg"></svg>
+    <div class="map-tooltip" id="map-tooltip">
+      <div class="map-tooltip-name" id="tt-name"></div>
+      <div class="map-tooltip-row">
+        <span class="map-tooltip-key">Aging Rate</span>
+        <span class="map-tooltip-val" id="tt-aging"></span>
+      </div>
+      <div class="map-tooltip-row">
+        <span class="map-tooltip-key">Health Exp.</span>
+        <span class="map-tooltip-val" id="tt-health"></span>
+      </div>
+      <div class="map-tooltip-row">
+        <span class="map-tooltip-key">Year</span>
+        <span class="map-tooltip-val" id="tt-year"></span>
+      </div>
+    </div>
+    <!-- Color legend (aging rate) -->
+    <div class="map-legend">
+      <div style="font-size:10px;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Aging Rate (%)</div>
+      <div class="legend-bar" id="legend-bar"></div>
+      <div class="legend-labels"><span id="leg-lo">Low</span><span id="leg-hi">High</span></div>
+    </div>
+    <!-- Size legend (health exp) -->
+    <div class="map-legend-size" id="size-legend"></div>
+  </div>
+
+  <div class="finding-box" style="margin-top:24px;">
+    <p>
+      <strong>What to look for:</strong> Japan, Germany, and Western Europe (high ageing rates) show
+      the deepest orange bubbles and largest sizes (high health spending); sub-Saharan Africa remains
+      young and low-spending — a pattern consistent across all 23 years.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ SECTION 2: SCATTER ═══════════════════════════════════════ -->
+<section class="section" id="sec-scatter">
+  <div class="section-label">02 — Cross-Sectional Relationship</div>
+  <h2 class="section-title fade-in">The <em>Pattern</em> Holds<br>Across Every Year</h2>
+  <p class="section-desc fade-in">
+    Each dot is a country in a given year. The positive slope persists whether you look at 2000 or 2022,
+    suggesting the relationship is structural — not a coincidence of a single period.
+  </p>
+
+  <div class="ctrl-row">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Year: <span id="scatter-year-label" class="range-val">2010</span></span>
+      <input type="range" id="scatter-year" min="2000" max="2022" value="2010" oninput="updateScatter()">
+    </div>
+  </div>
+
+  <div id="scatter-plot" style="height:480px;"></div>
+
+  <div class="finding-box">
+    <p>
+      <strong>Key insight:</strong> The positive relationship is visible even within income groups —
+      richer countries with <em>higher</em> ageing rates still spend more than their equally-rich but younger peers.
+      This is consistent with the Country FE result: ageing drives health costs <em>net of</em> GDP.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ SECTION 3: AGING RATE RANKING ═══════════════════════════ -->
+<section class="section" id="sec-ranking">
+  <div class="section-label">03 — 2022 Aging Rate Ranking</div>
+  <h2 class="section-title fade-in">Who Has the<br><em>Oldest Population</em>?</h2>
+  <p class="section-desc fade-in">
+    Top 20 most-aged countries in 2022, plus five key Asian economies highlighted for comparison.
+    Japan and several European nations lead the chart; Malaysia, India, Indonesia, and Bangladesh
+    remain relatively young — but the gap is narrowing fast.
+  </p>
+
+  <div id="ranking-plot" style="min-height:600px;"></div>
+
+  <div class="finding-box">
+    <p>
+      <strong>Key insight:</strong> Among the five highlighted Asian economies, China is ageing fastest —
+      a legacy of the one-child policy — while Bangladesh, India, Indonesia, and Malaysia remain
+      significantly younger than the global leaders, giving them a longer window to prepare.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ SECTION 4: TRENDS ═════════════════════════════════════════ -->
+<section class="section" id="sec-trend">
+  <div class="section-label">04 — Country Trajectories</div>
+  <h2 class="section-title fade-in">Ageing Rate &amp; Health Spending<br><em>Rise in Lockstep</em></h2>
+  <p class="section-desc fade-in">
+    The dual-axis line chart shows ageing rate (left axis, solid line) and health expenditure as % of GDP
+    (right axis, dashed line). Select multiple countries to observe how the two curves move together over time.
+  </p>
+
+  <div class="ctrl-row">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Countries</span>
+      <select id="trend-country" multiple style="height:130px;width:220px;font-size:11px;" onchange="updateTrend()"></select>
+    </div>
+    <div style="color:var(--text-dim);font-size:12px;align-self:flex-end;padding-bottom:4px;">
+      Hold <kbd style="background:var(--bg3);border:1px solid var(--border);padding:2px 6px;border-radius:4px;font-family:var(--font-mono);font-size:10px;">Ctrl</kbd> to select multiple
+    </div>
+  </div>
+
+  <div id="trend-plot" style="height:440px;"></div>
+
+  <div class="trend-legend-note">
+    <span><span class="legend-line-solid"></span> Solid = Aging Rate (left axis)</span>
+    <span><span class="legend-line-dashed"></span> Dashed = Health Exp. (right axis)</span>
+  </div>
+</section>
+
+<!-- ═══ SECTION 5: SIMULATOR ═════════════════════════════════════ -->
+<section class="section" id="sec-sim">
+  <div class="section-label">05 — Policy Scenario Simulator</div>
+  <h2 class="section-title fade-in">If Ageing Accelerates —<br><em>What Is the Fiscal Cost?</em></h2>
+  <p class="section-desc fade-in">
+    Drag the slider to set the projected increase in ageing rate, choose a reference country,
+    and see the additional health expenditure pressure — and what that money could fund instead.
+  </p>
+
+  <div class="sim-card">
+    <div class="ctrl-row" style="gap:40px;margin-bottom:0;flex-wrap:wrap;">
+      <div class="ctrl-group">
+        <span class="ctrl-label">Aging Rate Increase</span>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <input type="range" id="sim-delta" min="0.5" max="15" value="3" step="0.5" oninput="updateSim()">
+          <span class="range-val" id="sim-delta-val">+3.0%</span>
+        </div>
+      </div>
+      <div class="ctrl-group">
+        <span class="ctrl-label">Reference Country (2022 GDP)</span>
+        <select id="sim-country" onchange="updateSim()" style="width:260px;"></select>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-top:4px;" id="sim-country-gdp"></span>
+      </div>
+    </div>
+
+    <div class="sim-main-result">
+      <div class="sim-effect-box">
+        <div class="sim-effect-num" id="sim-effect-num">—</div>
+        <div class="sim-effect-label">Health Exp. Share of GDP (pp increase)</div>
+        <div class="sim-ci" id="sim-ci"></div>
+      </div>
+      <div class="sim-spending-box">
+        <div class="sim-spending-num" id="sim-spending-num">—</div>
+        <div class="sim-spending-label">Extra Annual Health Expenditure (USD)</div>
+      </div>
+    </div>
+
+    <div class="sim-divider">This spending could instead fund</div>
+
+    <div class="ref-grid">
+      <!-- Metro -->
+      <div class="ref-card metro">
+        <div class="ref-icon">🚇</div>
+        <div class="ref-count" id="ref-count-metro">—</div>
+        <div class="ref-unit">lines</div>
+        <div class="ref-name">Metro Lines</div>
+        <div class="ref-note">~15km incl. stations<br><em>*World Bank urban transport avg. 2020</em></div>
+      </div>
+      <div class="ref-or">or</div>
+      <!-- Hospital -->
+      <div class="ref-card hospital">
+        <div class="ref-icon">🏥</div>
+        <div class="ref-count" id="ref-count-hospital">—</div>
+        <div class="ref-unit">hospitals</div>
+        <div class="ref-name">General Hospitals</div>
+        <div class="ref-note">500-bed tertiary-level<br><em>*WHO capital cost benchmarks 2022</em></div>
+      </div>
+      <div class="ref-or">or</div>
+      <!-- Wind -->
+      <div class="ref-card wind">
+        <div class="ref-icon">⚡</div>
+        <div class="ref-count" id="ref-count-wind">—</div>
+        <div class="ref-unit">farms</div>
+        <div class="ref-name">Offshore Wind Farms</div>
+        <div class="ref-note">500MW installed capacity<br><em>*IRENA offshore wind cost 2023</em></div>
+      </div>
+      <div class="ref-or">or</div>
+      <!-- Highway -->
+      <div class="ref-card highway">
+        <div class="ref-icon">🛣️</div>
+        <div class="ref-count" id="ref-count-highway">—</div>
+        <div class="ref-unit">100km</div>
+        <div class="ref-name">Motorway</div>
+        <div class="ref-note">incl. interchanges &amp; infrastructure<br><em>*World Bank road infrastructure avg.</em></div>
+      </div>
+      <div class="ref-or">or</div>
+      <!-- Research -->
+      <div class="ref-card research">
+        <div class="ref-icon">🔬</div>
+        <div class="ref-count" id="ref-count-research">—</div>
+        <div class="ref-unit">projects</div>
+        <div class="ref-name">Research Grants</div>
+        <div class="ref-note">Major national R&amp;D grants<br><em>*OECD R&amp;D grant avg.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="finding-box" style="margin-top:24px;">
+    <p>
+      <strong>Model note:</strong> Based on the marginal effect from the Country FE model (coefficient 0.237, p&lt;0.001).
+      R² within = 0.108 — ageing explains roughly 11% of within-country variation.
+      <strong>This estimate is a directional fiscal signal, not a precise prediction.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════ -->
+<footer>
+  <div>
+    <div class="footer-title">Data Sources</div>
+    <div class="footer-body">
+      World Bank World Development Indicators: health expenditure (% of GDP), urban population,
+      GDP per capita, hospital beds per 1,000 people. UN Population Division: population aged 65+
+      as share of total. Sample: 197 sovereign states, 2000–2022. N = 4,495 after listwise deletion.
+      GDP 2022 reference values: World Bank national accounts data.
+    </div>
+  </div>
+  <div>
+    <div class="footer-title">Methodology Note</div>
+    <div class="footer-body">
+      Preferred model: Country Fixed Effects (linearmodels, Python). Standard errors clustered
+      at the entity level. Two-way FE result attenuated due to global ageing trend collinear with
+      year fixed effects — a standard identification constraint, not a modelling error.
+      Five-model robustness check confirms directional consistency. WQD7001 Group Assignment.
+    </div>
+  </div>
+</footer>
+
+<script src="./js/constants.js"></script>
+<script src="./js/map.js"></script>
+<script src="./js/scatter.js"></script>
+<script src="./js/ranking.js"></script>
+<script src="./js/trend.js"></script>
+<script src="./js/simulator.js"></script>
+<script src="./js/main.js"></script>
+</body>
+</html>
