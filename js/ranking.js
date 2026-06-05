@@ -33,13 +33,28 @@ function renderRankingChart() {
     },
     hovertemplate: '<b>%{y}</b><br>Aging Rate: %{x:.1f}%<extra></extra>',
     name: '',
+    showlegend: false,
+  };
+
+  const legendHL = {
+    type: 'scatter', x: [null], y: [null], mode: 'markers',
+    marker: { color: '#ea580c', size: 10, symbol: 'square', opacity: 0.92 },
+    name: 'Highlighted Asian economies',
+    showlegend: true,
+  };
+
+  const legendOther = {
+    type: 'scatter', x: [null], y: [null], mode: 'markers',
+    marker: { color: '#2563eb', size: 10, symbol: 'square', opacity: 0.62 },
+    name: 'Other countries',
+    showlegend: true,
   };
 
   const n = combined.length;
   const layout = {
     ...PLOTLY_LAYOUT_BASE,
-    height: n * 28 + 120,
-    margin: { t: 40, r: 72, b: 50, l: 160 },
+    height: n * 28 + 140,
+    margin: { t: 55, r: 72, b: 50, l: 160 },
     xaxis: applyAxisStyle({
       title: { text: 'Aging Rate (% population aged 65+)' },
       range: [0, combined[0].aging_rate * 1.20],
@@ -48,17 +63,16 @@ function renderRankingChart() {
       autorange: 'reversed',
       tickfont: { size: 10.5 },
     }),
-    annotations: [{
-      x: 0.5, y: 1.045,
-      xref: 'paper', yref: 'paper',
-      text: '<span style="color:#ea580c">■</span> Highlighted Asian economies &nbsp;|&nbsp; <span style="color:#2563eb">■</span> Other countries',
-      showarrow: false,
+    showlegend: true,
+    legend: {
+      orientation: 'h',
+      x: 0.5, xanchor: 'center',
+      y: 1.02, yanchor: 'bottom',
       font: { size: 10, family: "'DM Mono', monospace", color: '#5c637a' },
-      xanchor: 'center', yanchor: 'bottom',
-    }],
-    showlegend: false,
+      bgcolor: 'rgba(0,0,0,0)',
+    },
     bargap: 0.30,
   };
 
-  Plotly.newPlot('ranking-plot', [trace], layout, { responsive: true, displayModeBar: false });
+  Plotly.newPlot('ranking-plot', [trace, legendHL, legendOther], layout, { responsive: true, displayModeBar: false });
 }

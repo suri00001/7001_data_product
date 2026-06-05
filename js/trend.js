@@ -65,6 +65,7 @@ function updateTrend() {
 
   const layout = {
     ...PLOTLY_LAYOUT_BASE,
+    margin: { t: 30, r: 80, b: 90, l: 60 },
     xaxis: applyAxisStyle({ title: { text: 'Year' }, dtick: 4, tickmode: 'linear' }),
     yaxis: applyAxisStyle({
       title: { text: 'Aging Rate (% aged 65+)', font: { color: '#ea580c' } },
