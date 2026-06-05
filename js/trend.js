@@ -1,6 +1,6 @@
 // ════════════════════════════════════════════════════════
 // SECTION 3: DUAL-AXIS TREND CHART
-// Left  Y-axis (solid lines)  → Ageing Rate (%)
+// Left  Y-axis (solid lines)  → Aging Rate (%)
 // Right Y-axis (dashed lines) → Health Expenditure (% GDP)
 // ════════════════════════════════════════════════════════
 
@@ -41,7 +41,7 @@ function updateTrend() {
         yaxis: 'y',
         line: { color, width: 2.5, dash: 'solid' },
         marker: { size: 4, color },
-        hovertemplate: `<b>${country}</b><br>老龄化率: %{y:.2f}%<extra></extra>`,
+        hovertemplate: `<b>${country}</b><br>Aging Rate: %{y:.2f}%<extra></extra>`,
         legendgroup: country,
         showlegend: true,
         connectgaps: false,
@@ -55,7 +55,7 @@ function updateTrend() {
         yaxis: 'y2',
         line: { color, width: 2, dash: 'dot' },
         marker: { size: 3, color, symbol: 'square' },
-        hovertemplate: `<b>${country}</b><br>医疗支出: %{y:.2f}%<extra></extra>`,
+        hovertemplate: `<b>${country}</b><br>Health Expenditure: %{y:.2f}%<extra></extra>`,
         legendgroup: country,
         showlegend: false,
         connectgaps: false,
@@ -67,12 +67,12 @@ function updateTrend() {
     ...PLOTLY_LAYOUT_BASE,
     xaxis: applyAxisStyle({ title: { text: 'Year' }, dtick: 4, tickmode: 'linear' }),
     yaxis: applyAxisStyle({
-      title: { text: '老龄化率 (% aged 65+)', font: { color: '#ea580c' } },
+      title: { text: 'Aging Rate (% aged 65+)', font: { color: '#ea580c' } },
       tickfont: { color: '#ea580c' },
     }),
     yaxis2: {
       ...applyAxisStyle({
-        title: { text: '医疗支出 (% of GDP)', font: { color: '#2563eb' } },
+        title: { text: 'Health Expenditure (% of GDP)', font: { color: '#2563eb' } },
         tickfont: { color: '#2563eb' },
       }),
       overlaying: 'y',

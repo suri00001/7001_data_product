@@ -86,7 +86,7 @@ function renderModelComparisonPlot() {
 
 function renderCoefTable() {
   const interps = {
-    aging_rate:  'Each +1 pp ageing rate → +0.237 pp health exp/GDP',
+    aging_rate:  'Each +1 pp aging rate → +0.237 pp health exp/GDP',
     log_gdp_pc:  'GDP per capita not significant within countries',
     urban:       'Urbanisation not significant within countries',
     beds:        'More beds marginally associated with lower spending (efficiency)',
@@ -117,7 +117,7 @@ function renderModelTable() {
     'Pooled OLS':       'Baseline — ignores panel structure',
     'Random Effects':   'Comparison model',
     'Country FE':       'Preferred — absorbs time-invariant country effects',
-    'Two-way FE':       'Supplementary — ageing collinear with year FEs †',
+    'Two-way FE':       'Supplementary — aging collinear with year FEs †',
     'First Difference': 'Robustness check (first-differenced)',
   };
 

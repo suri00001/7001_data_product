@@ -28,7 +28,7 @@ function updateScatter() {
       x: yearData.map(d => d.aging_rate),
       y: yearData.map(d => d.health_exp),
       text: yearData.map(d => d.country),
-      hovertemplate: '<b>%{text}</b><br>Ageing: %{x:.1f}%<br>Health Exp: %{y:.2f}% GDP<extra></extra>',
+      hovertemplate: '<b>%{text}</b><br>Aging: %{x:.1f}%<br>Health Exp: %{y:.2f}% GDP<extra></extra>',
       marker: {
         size: 7,
         color: '#2563eb',
@@ -48,7 +48,7 @@ function updateScatter() {
 
   const layout = {
     ...PLOTLY_LAYOUT_BASE,
-    xaxis: applyAxisStyle({ title: { text: 'Ageing Rate (% population aged 65+)' } }),
+    xaxis: applyAxisStyle({ title: { text: 'Aging Rate (% population aged 65+)' } }),
     yaxis: applyAxisStyle({ title: { text: 'Health Expenditure (% of GDP)' } }),
     showlegend: true,
     legend: {
