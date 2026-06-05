@@ -11,7 +11,7 @@ function initTrendSelect() {
     opt.value = opt.textContent = c;
     sel.appendChild(opt);
   });
-  const defaults = ['Japan', 'Germany', 'United States', 'Malaysia', 'China', 'Nigeria'];
+  const defaults = ['Japan', 'Malaysia'];
   defaults.forEach(name => {
     for (let i = 0; i < sel.options.length; i++) {
       if (sel.options[i].value === name) sel.options[i].selected = true;
